@@ -121,23 +121,33 @@ ECMAScript 5中提供了`Object.keys`方法，用来获得一个对象的所有�
 - _.keys - Object Functions
 
 
+### mapObject
   
-  // Returns the results of applying the iteratee to each element of the object
-  // In contrast to _.map it returns an object
-  _.mapObject = function(obj, iteratee, context) {
-    iteratee = cb(iteratee, context);
-    var keys =  _.keys(obj),
-          length = keys.length,
-          results = {},
-          currentKey;
-      for (var index = 0; index < length; index++) {
-        currentKey = keys[index];
-        results[currentKey] = iteratee(obj[currentKey], currentKey, obj);
-      }
-      return results;
-  };
+    // Returns the results of applying the iteratee to each element of the object
+    // In contrast to _.map it returns an object
+    _.mapObject = function(obj, iteratee, context) {
+      iteratee = cb(iteratee, context);
+      var keys =  _.keys(obj),
+            length = keys.length,
+            results = {},
+            currentKey;
+        for (var index = 0; index < length; index++) {
+          currentKey = keys[index];
+          results[currentKey] = iteratee(obj[currentKey], currentKey, obj);
+        }
+        return results;
+    };
 
-  
+map函数用来对集合对象进行操作，返回一个数组。
+
+mapObject函数操作对象的所有元素，返回一个对象。
+
+*依赖*：
+
+- cb - 重要的内部函数
+- _.keys - Object Functions
+
+
   
 ### pairs
   
@@ -227,16 +237,26 @@ ECMAScript 5中提供了`Object.keys`方法，用来获得一个对象的所有�
 - createAssigner - 重要的内部函数   
   
   
+
+### findKey
   
-  // Returns the first key on an object that passes a predicate test
-  _.findKey = function(obj, predicate, context) {
-    predicate = cb(predicate, context);
-    var keys = _.keys(obj), key;
-    for (var i = 0, length = keys.length; i < length; i++) {
-      key = keys[i];
-      if (predicate(obj[key], key, obj)) return key;
-    }
-  };
+    // Returns the first key on an object that passes a predicate test
+    _.findKey = function(obj, predicate, context) {
+      predicate = cb(predicate, context);
+      // 通过_.keys获取所有属性键
+      var keys = _.keys(obj), key;
+      for (var i = 0, length = keys.length; i < length; i++) {
+        key = keys[i];
+        if (predicate(obj[key], key, obj)) return key;
+      }
+    };
+  
+该函数用了获取满足predicate条件的对象属性。类似于Array Functions中的findIndex。
+  
+*依赖*：
+
+- cb - 重要的内部函数   
+- _.keys - Object Functions
 
   
   
