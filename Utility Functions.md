@@ -46,6 +46,7 @@ noop仅仅代表一个空函数，在代码中需要使用空函数的时候可�
 另外，通过调用noop可以得到`undefined`。  
 
   
+### times
   
     // Run a function **n** times.
     _.times = function(n, iteratee, context) {
@@ -55,7 +56,19 @@ noop仅仅代表一个空函数，在代码中需要使用空函数的时候可�
       return accum;
     };
   
+在times函数内部会生成iteratee函数：
+
+    return function(value) {
+      return iteratee.call(context, value);
+    };
+        
+然后迭代n次执行iteratee函数，并且每次把index作为参数传递给iteratee函数。
   
+*依赖*：
+
+- optimizeCb - 重要的内部函数 
+
+
   
 ### random
   
@@ -122,6 +135,7 @@ now函数用来获得系统时间戳，如果Date.now不存在，就需要重新
       "'": '&#x27;',
       '`': '&#x60;'
     };
+    // 通过_.invert函数将所有的键值进行反转
     var unescapeMap = _.invert(escapeMap);
   
     // Functions for escaping and unescaping strings to/from HTML interpolation.
@@ -141,8 +155,16 @@ now函数用来获得系统时间戳，如果Date.now不存在，就需要重新
     _.escape = createEscaper(escapeMap);
     _.unescape = createEscaper(unescapeMap);
   
+escape函数的主要作用是转义HTML字符串，替换&, <, >, ", ', 和`字符。
+unescape函数与escape正好相反。
+
+*依赖*：
+
+- _.invert - Object Functions 
   
   
+  
+### result
   
     // If the value of the named `property` is a function then invoke it with the
     // `object` as context; otherwise, return it.
@@ -153,6 +175,16 @@ now函数用来获得系统时间戳，如果Date.now不存在，就需要重新
       }
       return _.isFunction(value) ? value.call(object) : value;
     };
+  
+该函数接受三个参数。result函数会在object对象上查找属性property：
+
+1. 如果属性存在，并且是个函数，那么就在object对象的上下文中执行这个属性方法
+2. 如果属性存在，并且不是函数，那么就直接返回属性值
+3. 如果属性不存在，就返回默认值fallback  
+  
+*依赖*：
+
+- _.isFunction - Object Functions 
   
   
   
@@ -168,6 +200,9 @@ now函数用来获得系统时间戳，如果Date.now不存在，就需要重新
     
 在同一个client session中生存一个唯一的id，常被用来作为历史DOM节点的id。
     
+  
+  
+### template
   
     // By default, Underscore uses ERB-style template delimiters, change the
     // following template settings to use alternative delimiters.
